@@ -16,3 +16,14 @@ export async function addPatient(formData: FormData) {
 );
 revalidatePath('/');
 }
+
+export async function updateHistory(formData : FormData) {
+  const id = formData.get('id');
+  const history = formData.get('history');
+
+  await pool.query(
+    'update patients set history = $1, updated_at = now() where id = $2',
+    [history, id]
+  );
+  revalidatePath(`/patients/${id}`);
+}
